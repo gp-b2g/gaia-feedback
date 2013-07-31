@@ -1,6 +1,7 @@
 'use strict';
 
 const DOGFOOD_URL = 'http://openwebdevice.com:9000';
+var IMEI_URL = '';
 
 var Feedback = {
   init: function fb_init() {
@@ -34,8 +35,9 @@ var Feedback = {
       var comment = document.getElementById('feedback-textarea');
       formData.append('comment', comment.value);
 
-      var imei = req.result;
+      var imei = req.result.statusMessage;
       if (imei) {
+		IMEI_URL=imei;
         formData.append('imei', imei);
       }
 
@@ -53,7 +55,8 @@ var Feedback = {
       }
 
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', DOGFOOD_URL);
+	  var url = DOGFOOD_URL + "?imei=" + IMEI_URL;
+      xhr.open('POST', url);
       xhr.addEventListener('load', function() {
         if (xhr.status === 200 || xhr.status === 0) {
           message("success");
